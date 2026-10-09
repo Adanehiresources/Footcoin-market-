@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earn Coins – FootCoin</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <span>⚽ FootCoin</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="ads.html" class="active">Earn Coins</a></li>
+      <li><a href="myteam.html">My Team</a></li>
+    </ul>
+    <div class="coin-display">
+      <div class="coin-icon">₵</div>
+      <span id="coinBalance">0</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="section-title">Watch Ads & Earn Coins</h1>
+    <p style="color:var(--text-muted); margin-bottom:2rem;">
+      Complete short video ads from our sponsors to earn FootCoins instantly. 
+      Higher reward ads take a bit longer – choose what fits your time!
+    </p>
+
+    <div class="stats-grid" style="margin-bottom:2.5rem;">
+      <div class="stat-card">
+        <div class="value" id="adsWatchedCount">0</div>
+        <div class="label">Ads Watched</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="potentialEarn">0</div>
+        <div class="label">Max Earnable Now</div>
+      </div>
+    </div>
+
+    <div class="ads-container" id="adsGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- Ad Watching Modal -->
+  <div class="modal-overlay" id="adModal">
+    <div class="modal">
+      <h2 style="margin-bottom:1rem;">🎬 Watching Ad</h2>
+      <div class="ad-video-placeholder">
+        <div class="spinner" id="adSpinner"></div>
+        <p style="margin-top:1rem; color:#aaa;" id="adRewardText">Watch to earn coins</p>
+        <p style="font-size:1.5rem; font-weight:800; color:var(--secondary); margin-top:0.5rem;" id="adTimer">15s</p>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="adProgress"></div>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">
+        Please keep this window open until the ad finishes.
+      </p>
+      <button class="btn btn-secondary" id="claimRewardBtn" style="display:none;">
+        Claim Reward 🎉
+      </button>
+      <button class="btn btn-outline" onclick="closeAdModal()" style="margin-top:0.8rem;">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 FootCoin Market – Simulated platform. Ads are fictional for demo purposes.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    function renderAds() {
+      document.getElementById('adsWatchedCount').textContent = state.totalAdsWatched;
+      const totalPotential = ADS.reduce((sum, a) => sum + a.reward, 0);
+      document.getElementById('potentialEarn').textContent = totalPotential;
+
+      const grid = document.getElementById('adsGrid');
+      grid.innerHTML = ADS.map(ad => `
+        <div class="ad-card">
+          <div class="ad-preview" onclick="startWatchingAd(${ad.id})">
+            <span style="font-size:3rem;">📺</span>
+            <span class="ad-reward">+${ad.reward} ₵</span>
+            <p style="margin-top:0.8rem; font-weight:600;">Click to Watch</p>
+            <p style="font-size:0.85rem; color:#aaa;">${ad.duration} seconds</p>
+          </div>
+          <div class="ad-info">
+            <div class="ad-title">${ad.title}</div>
+            <div class="ad-desc">${ad.desc}</div>
+            <button class="btn btn-primary" style="width:100%;" onclick="startWatchingAd(${ad.id})">
+              Watch & Earn ${ad.reward} Coins
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderAds);
+  </script>
+</body>
+</html>

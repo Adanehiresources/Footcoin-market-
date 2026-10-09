@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FootCoin Market – Buy World-Class Footballers</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <span>⚽ FootCoin</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="ads.html">Earn Coins</a></li>
+      <li><a href="myteam.html">My Team</a></li>
+    </ul>
+    <div class="coin-display">
+      <div class="coin-icon">₵</div>
+      <span id="coinBalance">0</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Build Your Dream Squad</h1>
+    <p>Buy elite footballers from every corner of the globe. Earn coins by watching short ads and sign the world’s best talent.</p>
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="players.html" class="btn btn-primary">Browse Players</a>
+      <a href="ads.html" class="btn btn-secondary">Watch Ads & Earn</a>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- How it works -->
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Watch Ads</h3>
+        <p>View short sponsored videos and instantly earn FootCoins.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Buy Players</h3>
+        <p>Spend your coins on world-class talent from any country.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Build Your Team</h3>
+        <p>Collect legends, epics and rare players. Show off your squad!</p>
+      </div>
+    </div>
+
+    <!-- Featured Players -->
+    <h2 class="section-title">Featured Superstars</h2>
+    <div class="cards-grid" id="featuredPlayers">
+      <!-- Filled by JS -->
+    </div>
+
+    <div style="text-align:center; margin-top:2rem;">
+      <a href="players.html" class="btn btn-outline">View All Players →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 FootCoin Market – Simulated football transfer platform. For entertainment only.</p>
+    <p style="margin-top:0.5rem; font-size:0.85rem;">Coins are virtual. No real money involved.</p>
+  </footer>
+
+  <!-- Toast container handled by JS -->
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const featured = PLAYERS.filter(p => p.rarity === 'Legendary' || p.rarity === 'Epic').slice(0, 6);
+      const container = document.getElementById('featuredPlayers');
+      container.innerHTML = featured.map(p => createPlayerCard(p)).join('');
+    });
+  </script>
+</body>
+</html>

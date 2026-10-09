@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Team – FootCoin</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <span>⚽ FootCoin</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="players.html">Players</a></li>
+      <li><a href="ads.html">Earn Coins</a></li>
+      <li><a href="myteam.html" class="active">My Team</a></li>
+    </ul>
+    <div class="coin-display">
+      <div class="coin-icon">₵</div>
+      <span id="coinBalance">0</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="section-title">My Squad</h1>
+
+    <!-- Dashboard Stats -->
+    <div class="stats-grid" id="dashboardStats">
+      <!-- Filled by JS -->
+    </div>
+
+    <h2 class="section-title" style="margin-top:2rem;">Owned Players</h2>
+    <div class="cards-grid" id="myTeamGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 FootCoin Market – Your virtual football empire.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    function renderDashboard() {
+      const owned = state.ownedPlayers.length;
+      const totalValue = state.ownedPlayers.reduce((sum, id) => {
+        const p = PLAYERS.find(pl => pl.id === id);
+        return sum + (p ? p.price : 0);
+      }, 0);
+      const avgRating = owned > 0 
+        ? Math.round(state.ownedPlayers.reduce((sum, id) => {
+            const p = PLAYERS.find(pl => pl.id === id);
+            return sum + (p ? p.rating : 0);
+          }, 0) / owned)
+        : 0;
+
+      document.getElementById('dashboardStats').innerHTML = `
+        <div class="stat-card">
+          <div class="value">${owned}</div>
+          <div class="label">Players Owned</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${state.coins.toLocaleString()}</div>
+          <div class="label">Current Coins</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${totalValue.toLocaleString()}</div>
+          <div class="label">Squad Value</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${avgRating || '—'}</div>
+          <div class="label">Avg Rating</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${state.totalAdsWatched}</div>
+          <div class="label">Ads Watched</div>
+        </div>
+        <div class="stat-card">
+          <div class="value">${state.totalSpent.toLocaleString()}</div>
+          <div class="label">Total Spent</div>
+        </div>
+      `;
+    }
+
+    function renderMyTeam() {
+      const grid = document.getElementById('myTeamGrid');
+      const owned = state.ownedPlayers.map(id => PLAYERS.find(p => p.id === id)).filter(Boolean);
+
+      if (owned.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon">🏟️</div>
+            <h3>Your squad is empty</h3>
+            <p>Head to the Players Market and sign your first star!</p>
+            <a href="players.html" class="btn btn-primary" style="margin-top:1.5rem;">Browse Players</a>
+          </div>`;
+        return;
+      }
+
+      // Sort by rating
+      owned.sort((a, b) => b.rating - a.rating);
+      grid.innerHTML = owned.map(p => createPlayerCard(p, false)).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderDashboard();
+      renderMyTeam();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Players Market – FootCoin</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <span>⚽ FootCoin</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="players.html" class="active">Players</a></li>
+      <li><a href="ads.html">Earn Coins</a></li>
+      <li><a href="myteam.html">My Team</a></li>
+    </ul>
+    <div class="coin-display">
+      <div class="coin-icon">₵</div>
+      <span id="coinBalance">0</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="section-title">Global Transfer Market</h1>
+    <p style="color:var(--text-muted); margin-bottom:1.5rem;">
+      Discover and sign footballers from every continent. Use filters to find your next star.
+    </p>
+
+    <!-- Filters -->
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="Search player name..." style="min-width:220px;">
+      <select id="positionFilter">
+        <option value="">All Positions</option>
+        <option value="ST">Striker (ST)</option>
+        <option value="LW">Left Wing (LW)</option>
+        <option value="RW">Right Wing (RW)</option>
+        <option value="CAM">Attacking Mid (CAM)</option>
+        <option value="CM">Central Mid (CM)</option>
+        <option value="CDM">Defensive Mid (CDM)</option>
+        <option value="LB">Left Back (LB)</option>
+        <option value="RB">Right Back (RB)</option>
+        <option value="CB">Center Back (CB)</option>
+      </select>
+      <select id="rarityFilter">
+        <option value="">All Rarities</option>
+        <option value="Legendary">Legendary</option>
+        <option value="Epic">Epic</option>
+        <option value="Rare">Rare</option>
+      </select>
+      <select id="sortFilter">
+        <option value="rating-desc">Highest Rating</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name A-Z</option>
+      </select>
+    </div>
+
+    <div class="cards-grid" id="playersGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 FootCoin Market – Simulated football transfer platform.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    function renderPlayers() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const position = document.getElementById('positionFilter').value;
+      const rarity = document.getElementById('rarityFilter').value;
+      const sort = document.getElementById('sortFilter').value;
+
+      let filtered = PLAYERS.filter(p => {
+        if (search && !p.name.toLowerCase().includes(search)) return false;
+        if (position && p.position !== position) return false;
+        if (rarity && p.rarity !== rarity) return false;
+        return true;
+      });
+
+      // Sort
+      filtered.sort((a, b) => {
+        switch (sort) {
+          case 'price-asc': return a.price - b.price;
+          case 'price-desc': return b.price - a.price;
+          case 'name-asc': return a.name.localeCompare(b.name);
+          default: return b.rating - a.rating;
+        }
+      });
+
+      const grid = document.getElementById('playersGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon">🔍</div>
+            <h3>No players found</h3>
+            <p>Try adjusting your filters</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => createPlayerCard(p)).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPlayers();
+      document.getElementById('searchInput').addEventListener('input', renderPlayers);
+      document.getElementById('positionFilter').addEventListener('change', renderPlayers);
+      document.getElementById('rarityFilter').addEventListener('change', renderPlayers);
+      document.getElementById('sortFilter').addEventListener('change', renderPlayers);
+    });
+  </script>
+</body>
+</html>
